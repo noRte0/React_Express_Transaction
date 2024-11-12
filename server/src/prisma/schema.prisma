@@ -1,0 +1,79 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String      @id @default(uuid())  
+  name          String?
+  email         String?     @unique
+  emailVerified DateTime?
+  image         String?
+  role          AuthRole    @default(USER)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  tables        Table[]     
+  accounts      Account[]    
+  transactions  Transaction[] 
+}
+
+model Table {
+  id            String      @id @default(uuid())
+  userId        String
+  user          User        @relation(fields: [userId], references: [id])  
+  name          String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  transactions  Transaction[] 
+
+  @@index([userId])  
+}
+
+model Account {
+  id                  String   @id @default(cuid())
+  userId              String
+  user                User     @relation(fields: [userId], references: [id])
+  type                String
+  provider            String
+  providerAccountId   String
+  refresh_token       String? @db.Text
+  access_token        String? @db.Text
+  expires_at          BigInt?
+  id_token            String? @db.Text
+  scope               String?
+  session_state       String?
+  token_type          String?
+
+  @@index([userId])
+  @@unique([provider,providerAccountId])
+}
+
+model Transaction {
+  id            String    @id @default(uuid())
+  tableId       String
+  table         Table     @relation(fields: [tableId], references: [id]) 
+  userId        String
+  user          User      @relation(fields: [userId], references: [id])
+  category      String
+  amount        Float
+  date          DateTime
+  note          String
+  attachmentUrl String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([tableId]) 
+}
+
+enum AuthRole {
+  USER
+  ADMIN
+}
+
+
