@@ -11,6 +11,7 @@ function App() {
   const [profile, setProfile] = useState(null);
   const [user, setUser] = useState(null);
   const [tables, setTables] = useState([]); // เก็บตารางที่ดึงจาก backend
+  const [selectedTableId, setSelectedTableId] = useState('');
 
   const handleLoginSuccess = (res) => {
     const profile = res.profileObj;
@@ -111,8 +112,8 @@ function App() {
           />
           <div>
             <h1>Welcome, {user.name}</h1>
-            <TableManagement userId={user.id} /> {/* ส่ง userId ไปยัง TableManagement */}
-            <AddTransaction userId={user.id} tables={tables} /> {/* เพิ่ม AddTransaction component */}
+            <TableManagement userId={user.id} tables={tables} setTables={setTables} setSelectedTableId={setSelectedTableId}/> {/* ส่ง userId ไปยัง TableManagement */}
+            <AddTransaction userId={user.id} tables={tables} selectedTableId={selectedTableId} setSelectedTableId={setSelectedTableId} /> {/* เพิ่ม AddTransaction component */}
           </div>
         </div>
       ) : (
