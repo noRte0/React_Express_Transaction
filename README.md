@@ -58,9 +58,9 @@ run client side
 npm start
 ```
 
-Client จะรันอยู่ที่ http://localhost:3000
+Client port http://localhost:3000
 
-Server จะรันอยู่ที่ http://localhost:3030
+Server port http://localhost:3030
 
 
 ## Tech Stack
